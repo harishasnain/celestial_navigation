@@ -2,33 +2,30 @@ import os
 import sys
 
 # Add the tetra3 directory to the Python path
-tetra3_path = "/home/haris/tetra3"
+tetra3_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'tetra3'))
 sys.path.append(tetra3_path)
 
-from tetra3 import Tetra3
+import tetra3
+from PIL import Image
 
-def solve_plate(image):
-    solver = Tetra3()
-    
-    # Use the relative path to the database within the tetra3 directory
-    database_path = os.path.join(tetra3_path, "default_database.npz")
-    solver.load_database(database_path)
-    
-    # Remove thresh_factor from the parameters
-    result = solver.solve_from_image(image, 
-                                     fov_estimate=80,  # Adjust this value based on your camera's field of view
-                                     min_area=5)
-    if result is None:
-        return None
+class PlateSolver:
+    def __init__(self):
+        self.t3 = tetra3.Tetra3()
 
-    stars = []
-    for star in result.stars:
-        stars.append({
-            'ra': star.ra,
-            'dec': star.dec,
-            'x': star.x,
-            'y': star.y,
-            'magnitude': star.mag  # Add magnitude information
-        })
-
-    return stars
+    def solve_image(self, image_path):
+        with Image.open(image_path) as img:
+            solution = self.t3.solve_from_image(img, distortion=[-.2, .1], fov_estimate=20, fov_max_error=5)
+        
+        if solution['RA'] is None:
+            raise ValueError("Failed to solve the image")
+        
+        return {
+            'ra': solution['RA'],
+            'dec': solution['Dec'],
+            'roll': solution['Roll'],
+            'fov': solution['FOV'],
+            'distortion': solution['distortion'],
+            'rmse': solution['RMSE'],
+            'matches': solution['Matches'],
+            'prob': solution['Prob']
+        }

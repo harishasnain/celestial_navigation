@@ -1,14 +1,18 @@
-from PIL import Image
-import numpy as np
+import os
+from datetime import datetime
 
-def load_image(image_path):
-    try:
-        with Image.open(image_path) as img:
-            # Convert image to RGB (3 channels) or L (1 channel for grayscale)
-            if img.mode == 'RGB':
-                return np.array(img)
-            else:
-                return np.array(img.convert('L'))
-    except Exception as e:
-        print(f"Error loading image: {e}")
-        return None
+def get_image_path():
+    while True:
+        path = input("Enter the path to the star image: ").strip()
+        if os.path.isfile(path):
+            return path
+        print("Invalid file path. Please try again.")
+
+def get_observation_time():
+    while True:
+        time_str = input("Enter the observation time (YYYY-MM-DD HH:MM:SS): ").strip()
+        try:
+            return datetime.strptime(time_str, "%Y-%m-%d %H:%M:%S")
+        except ValueError:
+            print("Invalid time format. Please try again.")
+

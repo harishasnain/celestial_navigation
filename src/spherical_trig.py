@@ -1,34 +1,40 @@
-import math
+import numpy as np
+from astropy import units as u
+from astropy.coordinates import SkyCoord, EarthLocation, AltAz
+from astropy.time import Time
 
 def angular_distance(ra1, dec1, ra2, dec2):
-    """
-    Calculate the angular distance between two points on a sphere.
-    """
-    phi1 = math.radians(90 - dec1)
-    phi2 = math.radians(90 - dec2)
-    theta1 = math.radians(ra1)
-    theta2 = math.radians(ra2)
+    """Calculate angular distance between two points on a sphere."""
+    return np.arccos(np.sin(dec1) * np.sin(dec2) + 
+                     np.cos(dec1) * np.cos(dec2) * np.cos(ra1 - ra2))
 
-    cos = (math.sin(phi1) * math.sin(phi2) * math.cos(theta1 - theta2) +
-           math.cos(phi1) * math.cos(phi2))
-    return math.degrees(math.acos(cos))
+def calculate_position(star_coords, observation_time):
+    """Calculate observer's position based on star coordinates and time."""
+    # Convert star coordinates to SkyCoord objects
+    stars = [SkyCoord(ra=ra*u.degree, dec=dec*u.degree, frame='icrs') for ra, dec in star_coords]
+    
+    # Create a grid of possible Earth locations
+    lats = np.arange(-90, 91, 1)
+    lons = np.arange(-180, 181, 1)
+    
+    best_location = None
+    min_error = float('inf')
+    
+    for lat in lats:
+        for lon in lons:
+            location = EarthLocation(lat=lat*u.deg, lon=lon*u.deg)
+            altaz_frame = AltAz(obstime=observation_time, location=location)
+            
+            # Calculate altitudes and azimuths for all stars
+            calculated_altaz = [star.transform_to(altaz_frame) for star in stars]
+            
+            # Calculate error between observed and calculated positions
+            error = sum(angular_distance(s1.az.rad, s1.alt.rad, s2.az.rad, s2.alt.rad) 
+                        for s1, s2 in zip(stars[:-1], stars[1:]))
+            
+            if error < min_error:
+                min_error = error
+                best_location = location
+    
+    return best_location
 
-def spherical_triangle_solve(a, b, C):
-    """
-    Solve a spherical triangle given two sides and the included angle.
-    Returns the third side and the other two angles.
-    """
-    a_rad = math.radians(a)
-    b_rad = math.radians(b)
-    C_rad = math.radians(C)
-
-    cos_c = math.cos(a_rad) * math.cos(b_rad) + math.sin(a_rad) * math.sin(b_rad) * math.cos(C_rad)
-    c = math.degrees(math.acos(cos_c))
-
-    cos_A = (math.cos(b_rad) - math.cos(a_rad) * cos_c) / (math.sin(a_rad) * math.sin(math.acos(cos_c)))
-    A = math.degrees(math.acos(cos_A))
-
-    cos_B = (math.cos(a_rad) - math.cos(b_rad) * cos_c) / (math.sin(b_rad) * math.sin(math.acos(cos_c)))
-    B = math.degrees(math.acos(cos_B))
-
-    return c, A, B

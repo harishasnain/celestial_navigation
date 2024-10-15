@@ -1,44 +1,31 @@
-#!/usr/bin/env python3
-
-import sys
-import os
-
-# Add the tetra3 directory to the Python path
-tetra3_path = "/home/haris/tetra3"
-sys.path.append(tetra3_path)
-
-from datetime import datetime
-from src.plate_solver import solve_plate
-from src.location_calculator import calculate_location
-from src.utils import load_image
+from src.location_solver import LocationSolver
+from src.utils import get_image_path, get_observation_time
 
 def main():
-    if len(sys.argv) != 4:
-        print("Usage: python3 main.py <image_path> <date> <time>")
-        sys.exit(1)
-
-    image_path = sys.argv[1]
-    date_str = sys.argv[2]
-    time_str = sys.argv[3]
-
+    print("Celestial Navigation System")
+    print("---------------------------")
+    
+    image_path = get_image_path()
+    observation_time = get_observation_time()
+    
+    solver = LocationSolver()
+    
     try:
-        timestamp = datetime.strptime(f"{date_str} {time_str}", "%Y-%m-%d %H:%M:%S")
-    except ValueError:
-        print("Invalid date or time format. Use YYYY-MM-DD HH:MM:SS")
-        sys.exit(1)
-
-    image = load_image(image_path)
-    if image is None:
-        print("Failed to load image")
-        sys.exit(1)
-
-    stars = solve_plate(image)
-    if not stars:
-        print("Failed to solve plate")
-        sys.exit(1)
-
-    latitude, longitude = calculate_location(stars, timestamp)
-    print(f"Estimated location: {latitude:.6f}°, {longitude:.6f}°")
+        location, plate_solution = solver.solve_location(image_path, observation_time)
+        print(f"\nEstimated Location:")
+        print(f"Latitude:  {location.lat:.4f}")
+        print(f"Longitude: {location.lon:.4f}")
+        print(f"\nPlate Solving Results:")
+        print(f"RA: {plate_solution['ra']:.4f}")
+        print(f"Dec: {plate_solution['dec']:.4f}")
+        print(f"Roll: {plate_solution['roll']:.4f}")
+        print(f"FOV: {plate_solution['fov']:.4f}")
+        print(f"Distortion: {plate_solution['distortion']:.4f}")
+        print(f"RMSE: {plate_solution['rmse']:.4f}")
+        print(f"Matches: {plate_solution['matches']}")
+        print(f"Probability: {plate_solution['prob']:.2e}")
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
 
 if __name__ == "__main__":
     main()
