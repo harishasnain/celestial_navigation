@@ -6,7 +6,7 @@ from PIL import Image
 root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(root_path)
 
-from tetra3.tetra3.tetra3 import Tetra3
+from tetra3 import Tetra3
 
 class PlateSolver:
     def __init__(self):
