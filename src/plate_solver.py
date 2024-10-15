@@ -14,10 +14,9 @@ def solve_plate(image):
     database_path = os.path.join(tetra3_path, "default_database.npz")
     solver.load_database(database_path)
     
-    # Add necessary parameters for solve_from_image method
+    # Remove thresh_factor from the parameters
     result = solver.solve_from_image(image, 
                                      fov_estimate=80,  # Adjust this value based on your camera's field of view
-                                     thresh_factor=10, 
                                      min_area=5)
     if result is None:
         return None
