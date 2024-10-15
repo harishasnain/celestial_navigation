@@ -1,4 +1,5 @@
 haris@haris-desktop:~/celestial_navigation$ python3 main.py
+['__doc__', '__file__', '__loader__', '__name__', '__package__', '__path__', '__spec__']
 Celestial Navigation System
 ---------------------------
 Enter the path to the star image: /home/haris/celestial_navigation/test_images/test_image.png
@@ -12,8 +13,7 @@ Traceback (most recent call last):
   File "/home/haris/celestial_navigation/src/location_solver.py", line 7, in __init__
     self.plate_solver = PlateSolver()
                         ^^^^^^^^^^^^^
-  File "/home/haris/celestial_navigation/src/plate_solver.py", line 13, in __init__
-    self.t3 = tetra3.Tetra3()
-              ^^^^^^^^^^^^^
-AttributeError: module 'tetra3' has no attribute 'Tetra3'
+  File "/home/haris/celestial_navigation/src/plate_solver.py", line 16, in __init__
+    raise AttributeError("tetra3 module does not have Tetra3 attribute. Available attributes: " + str(dir(tetra3)))
+AttributeError: tetra3 module does not have Tetra3 attribute. Available attributes: ['__doc__', '__file__', '__loader__', '__name__', '__package__', '__path__', '__spec__']
 haris@haris-desktop:~/celestial_navigation$ 
