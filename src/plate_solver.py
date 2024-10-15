@@ -2,15 +2,15 @@ import os
 import sys
 from PIL import Image
 
-# Add the tetra3 directory to the Python path
-tetra3_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(tetra3_path)
+# Add the root directory to the Python path
+root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(root_path)
 
-import tetra3
+from tetra3.tetra3 import Tetra3
 
 class PlateSolver:
     def __init__(self):
-        self.t3 = tetra3.Tetra3()
+        self.t3 = Tetra3()
 
     def solve_image(self, image_path):
         with Image.open(image_path) as img:
