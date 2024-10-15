@@ -1,18 +1,13 @@
 haris@haris-desktop:~/celestial_navigation$ python3 main.py /home/haris/celestial_navigation/images/test_image.png 2024-01-05 22:00:00
-2024-10-14 20:37:19,333:tetra3.Tetra3-INFO: Loading database from: /home/haris/tetra3/data/tetra3_database.npz
+2024-10-14 20:40:16,600:tetra3.Tetra3-INFO: Loading database from: /home/haris/tetra3/default_database.npz
 Traceback (most recent call last):
   File "/home/haris/celestial_navigation/main.py", line 44, in <module>
     main()
   File "/home/haris/celestial_navigation/main.py", line 35, in main
     stars = solve_plate(image)
             ^^^^^^^^^^^^^^^^^^
-  File "/home/haris/celestial_navigation/src/plate_solver.py", line 15, in solve_plate
-    solver.load_database(database_path)
-  File "/home/haris/tetra3/tetra3.py", line 325, in load_database
-    with np.load(path) as data:
-         ^^^^^^^^^^^^^
-  File "/usr/lib/python3/dist-packages/numpy/lib/npyio.py", line 427, in load
-    fid = stack.enter_context(open(os_fspath(file), "rb"))
-                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: '/home/haris/tetra3/data/tetra3_database.npz'
+  File "/home/haris/celestial_navigation/src/plate_solver.py", line 17, in solve_plate
+    result = solver.solve(image)
+             ^^^^^^^^^^^^
+AttributeError: 'Tetra3' object has no attribute 'solve'
 haris@haris-desktop:~/celestial_navigation$ 
