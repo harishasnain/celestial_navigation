@@ -2,3 +2,4 @@ git+https://github.com/esa/tetra3.git@legacy
 Pillow==9.5.0
 numpy==1.24.3
 ephem==4.1.4
+scipyf

@@ -11,7 +11,7 @@ def solve_plate(image):
     solver = Tetra3()
     
     # Use the relative path to the database within the tetra3 directory
-    database_path = os.path.join(tetra3_path, "data", "tetra3_database.bin")
+    database_path = os.path.join(tetra3_path, "default_database.npz")
     solver.load_database(database_path)
     
     result = solver.solve(image)
