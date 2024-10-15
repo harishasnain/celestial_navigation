@@ -6,11 +6,14 @@ tetra3_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'tet
 sys.path.append(tetra3_path)
 
 import tetra3
-from PIL import Image
+print(dir(tetra3))  # This will print all attributes of the tetra3 module
 
 class PlateSolver:
     def __init__(self):
-        self.t3 = tetra3.Tetra3()
+        if hasattr(tetra3, 'Tetra3'):
+            self.t3 = tetra3.Tetra3()
+        else:
+            raise AttributeError("tetra3 module does not have Tetra3 attribute. Available attributes: " + str(dir(tetra3)))
 
     def solve_image(self, image_path):
         with Image.open(image_path) as img:
