@@ -1,10 +1,19 @@
 haris@haris-desktop:~/celestial_navigation$ python3 main.py
+Celestial Navigation System
+---------------------------
+Enter the path to the star image: /home/haris/celestial_navigation/test_images/test_image.png
+Enter the observation time (YYYY-MM-DD HH:MM:SS): 2024-01-05 22:00:00
 Traceback (most recent call last):
-  File "/home/haris/celestial_navigation/main.py", line 1, in <module>
-    from src.location_solver import LocationSolver
-  File "/home/haris/celestial_navigation/src/location_solver.py", line 2, in <module>
-    from .spherical_trig import calculate_position
-  File "/home/haris/celestial_navigation/src/spherical_trig.py", line 2, in <module>
-    from astropy import units as u
-ModuleNotFoundError: No module named 'astropy'
+  File "/home/haris/celestial_navigation/main.py", line 31, in <module>
+    main()
+  File "/home/haris/celestial_navigation/main.py", line 11, in main
+    solver = LocationSolver()
+             ^^^^^^^^^^^^^^^^
+  File "/home/haris/celestial_navigation/src/location_solver.py", line 7, in __init__
+    self.plate_solver = PlateSolver()
+                        ^^^^^^^^^^^^^
+  File "/home/haris/celestial_navigation/src/plate_solver.py", line 13, in __init__
+    self.t3 = tetra3.Tetra3()
+              ^^^^^^^^^^^^^
+AttributeError: module 'tetra3' has no attribute 'Tetra3'
 haris@haris-desktop:~/celestial_navigation$ 
