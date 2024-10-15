@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 
 import sys
+import os
+
+# Add the tetra3 directory to the Python path
+tetra3_path = "/home/haris/tetra3"
+sys.path.append(tetra3_path)
+
 from datetime import datetime
 from src.plate_solver import solve_plate
 from src.location_calculator import calculate_location
@@ -8,7 +14,7 @@ from src.utils import load_image
 
 def main():
     if len(sys.argv) != 4:
-        print("Usage: python main.py <image_path> <date> <time>")
+        print("Usage: python3 main.py <image_path> <date> <time>")
         sys.exit(1)
 
     image_path = sys.argv[1]
