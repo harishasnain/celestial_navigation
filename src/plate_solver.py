@@ -14,7 +14,7 @@ class PlateSolver:
 
     def solve_image(self, image_path):
         with Image.open(image_path) as img:
-            solution = self.t3.solve_from_image(img, distortion=[-.2, .1], fov_estimate=20, fov_max_error=5)
+            solution = self.t3.solve_from_image(img, distortion=[-0.01, 0.01], fov_estimate=53.5, fov_max_error=5)
         
         if solution['RA'] is None:
             raise ValueError("Failed to solve the image")
